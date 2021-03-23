@@ -1,2 +1,2 @@
 # ROF
- Recognition of olympiad forms
+Программа для распознавание олимпиадных бланков
