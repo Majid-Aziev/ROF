@@ -32,7 +32,7 @@ def processing(photo, v_answer = "??????"):
     #--Отправка по функциям
    
     #--Проверка
-    if f == "" and n == "":
+    if f == "" or n == "":
 
         with open('log/log.txt', 'a') as f:
             f.write(f"{datetime.date.today()}, В бланке есть ошибки \n")
@@ -77,16 +77,27 @@ def processing(photo, v_answer = "??????"):
 #--Подсчёт баллов
 def measuring_points(answer, v_answer):
     balls = 0
+
+    if v_answer == "?????":
+        balls = "?????"
+        return "?????"
+
     v_answer = list(v_answer)
     answer = list(answer)
     i = 0
+
     try:
+        m_balls = len(v_answer)
+        
         for k in range(len(v_answer)):
-            if v_answer[i] == answer[i]:
+            if str(v_answer[i]) == str(answer[i]):
                 balls = balls + 1
             i += 1          
     except IndexError:
-        balls = "?????"
+        balls = str(balls)
+    
+    balls = f"{balls * 100 // m_balls}%"
+
     return balls #->ОТПРАВКА ОТВЕТА
 #--Подсчёт баллов
 
@@ -226,7 +237,7 @@ def blank(photo):
         elif jj == 2 or jj == 6 or jj == 10 or jj == 14 or jj == 18 or jj == 22 or jj == 26 or jj == 30 or jj == 34 or jj == 38:
             answers_bukcs.append("B")
         elif jj == 3 or jj == 7 or jj == 11 or jj == 15 or jj == 19 or jj == 23 or jj == 27 or jj == 31 or jj == 35 or jj == 39:
-            answers_bukcs.append("С")	
+            answers_bukcs.append("C")	
         else:
             answers_bukcs.append("D")
 

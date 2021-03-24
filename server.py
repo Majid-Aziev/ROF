@@ -50,7 +50,7 @@ def help(message):
 #--Команда при получение фото
 @bot.message_handler(content_types=["photo"])
 def photo(message):
-
+    
     #--Загрузка файла
     file_info = bot.get_file(message.photo[len(message.photo) - 1].file_id)
     downloaded_file = bot.download_file(file_info.file_path)
@@ -61,7 +61,7 @@ def photo(message):
     #--Загрузка файла
 
     bot.send_message(message.chat.id, "Спасибо! Добавишь правильные ответы? Напиши *Да* или *Нет*", parse_mode='Markdown', reply_markup=keyboard2)
-#--Команда при получение фото
+#--Команда при получение фото 
 
 
 #--Команда при написание "Да" или "Нет" или "_"
@@ -81,21 +81,24 @@ def lalala(message):
                 textWWW = processing(src) #Отправка фото и получение ответа от функций
                 bot.send_message(message.chat.id, textWWW, reply_markup=keyboard1)
             except: #--Если фото бланка нету
-                bot.send_message(message.chat.id, "Ой, я вас не понял. \n Отправьте фото бланка пожалуйста", reply_markup=keyboard1)
+                bot.send_message(message.chat.id, "Ой, возникла ошибка. \nОтправьте фото бланка ещё раз пожалуйста", reply_markup=keyboard1)
 
     #--Если пользователь ответил Нет
 
 
     #--Если пользователь отправил данные по правильным ответам
     elif message.text[0] == "#":
+        try:
             v_answer = message.text # Определение переменной v_answer
             textWWW = processing(src, v_answer) # Отправка фото, правильных ответов и получение ответа от функций
             bot.send_message(message.chat.id, textWWW, reply_markup=keyboard1)
+        except:
+            bot.send_message(message.chat.id, "Ой, возникла ошибка. \nОтправьте фото бланка ещё раз пожалуйста", reply_markup=keyboard1)
     #--Если пользователь отправил данные по правильным ответам
    
     #--Если другая непонятная команда
     else:
-            bot.send_message(message.chat.id, "Простите, я не понял вашей команды. \n Напишите /help для вызова меню помощи", reply_markup=keyboard1)    
+        bot.send_message(message.chat.id, "Простите, я не понял вашей команды. \n Напишите /help для вызова меню помощи", reply_markup=keyboard1)    
     #--Если другая непонятная команда
 
 #--Команда при написание "Да" или "Нет" или "_"
