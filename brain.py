@@ -20,19 +20,19 @@ def processing(photo, v_answer = "??????"):
     #--Подготовительный процес
 
     #--Отправка по функциям
-    f, n = fn_recognition(photo)
+    first_name, last_name = fn_recognition(photo)
 
-    answer = blank(photo)
-
+    answer = blank_recognition(photo)
     
-    klass_nuvbmer = klass(photo)
+    class_nuvbmer = class_recognition(photo)
 
+    points = measuring_points(answer, v_answer)
 
-    balls_answer = measuring_points(answer, v_answer)
+    olimpiada = olimpiada_recognition(photo)
     #--Отправка по функциям
    
     #--Проверка
-    if f == "" or n == "":
+    if first_name == "" or last_name == "":
 
         with open('log/log.txt', 'a') as f:
             f.write(f"{datetime.date.today()}, В бланке есть ошибки \n")
@@ -43,7 +43,7 @@ def processing(photo, v_answer = "??????"):
     #--Проверка
 
     #--Подготовительный процес
-    fn = f"{f}-{n}"
+    fn = f"{first_name}-{last_name}"
     #--Подготовительный процес
 
 
@@ -51,17 +51,18 @@ def processing(photo, v_answer = "??????"):
     with open('log/log.txt', 'a') as f:
         f.write(f"{datetime.date.today()}, Пытаюсь занести пользователя с данными: \n")
         f.write(f"Имя и Фамилия: {fn} \n")
-        f.write(f"Класс: {klass_nuvbmer} \n")
+        f.write(f"Класс: {class_nuvbmer} \n")
         f.write(f"Ответ ученика: {answer} \n")
         f.write(f"Правильный ответ: {v_answer} \n")
-        f.write(f"Баллы набранные учеником: {balls_answer} \n")
+        f.write(f"Баллы набранные учеником: {points} \n")
+        f.write(f"Олимпиада: {olimpiada} \n")
         f.write("----------------------- \n")
         f.close()
     #==Логирование
 
 
     #--Отправка на вставку в excel
-    textWWW = insert_excel(fn, klass_nuvbmer, answer, v_answer, balls_answer)
+    textWWW = insert_excel(fn, class_nuvbmer, answer, v_answer, points, olimpiada)
     #--Отправка на вставку в excel
 
     #--Удаление файла
@@ -90,7 +91,7 @@ def measuring_points(answer, v_answer):
         m_balls = len(v_answer)
         
         for k in range(len(v_answer)):
-            if str(v_answer[i]) == str(answer[i]):
+            if str(v_answer[i]).lower() == str(answer[i]).lower():
                 balls = balls + 1
             i += 1          
     except IndexError:
@@ -100,6 +101,27 @@ def measuring_points(answer, v_answer):
 
     return balls #->ОТПРАВКА ОТВЕТА
 #--Подсчёт баллов
+
+
+def olimpiada_recognition(photo):
+
+    img = cv2.imread(photo)
+
+    olimpiada = img[13:29, 180:458]
+      
+    gray_olimpiada = cv2.cvtColor(olimpiada, cv2.COLOR_BGR2GRAY)
+
+    text_olimpiada = pytesseract.image_to_string(olimpiada, lang="rus")
+
+    o = []
+
+    for i in text_olimpiada:
+        if i != " " and i != "\n" and i != "\x0c":
+            o.append(i)
+
+    olimpiada = ''.join(o)
+
+    return olimpiada.lower() #->ОТПРАВКА ОТВЕТА    
 
 #--Распознавание имени и фамилии
 def fn_recognition(photo):
@@ -126,14 +148,14 @@ def fn_recognition(photo):
         if i != " " and i != "\n" and i != "\x0c":
             n.append(i)
 
-    f = ''.join(f)
-    n = ''.join(n)
+    first_name = ''.join(f)
+    last_name = ''.join(n)
 
-    return f.lower(), n.lower() #->ОТПРАВКА ОТВЕТА
+    return first_name.lower(), last_name.lower() #->ОТПРАВКА ОТВЕТА
 #--Распознавание имени и фамилии
 
 #--Распознавание номера класса
-def klass(photo):
+def class_recognition(photo):
 
     img = cv2.imread(photo)
 
@@ -154,7 +176,7 @@ def klass(photo):
 
 
 #--Распознавание ответов ученика на бланке
-def blank(photo):
+def blank_recognition(photo):
 
     i = 0
 

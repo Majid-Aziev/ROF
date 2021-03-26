@@ -7,34 +7,41 @@ sheet = wb.active
 #--Открытие excel
 
 #--Функция записи строк
-def insert_excel(fio, klass_nuvbmer, otvet, prav_otver, balls):
+def insert_excel(fn, сlass_nuvbmer, answer, v_answer, points, olimpiada):
     try:
         #--Подготовка 
-        fio_Y = []
-        otvet_Y = []
-        prav_otver_Y = []
-        balls_Y = []
-        
-        for i in fio:
-            if i != " " and i != "\n" and i != "\x0c":
-                 fio_Y.append(i)
+        fn_Y = []
+        answer_Y = []
+        v_answer_Y = []
+        points_Y = []
+        olimpiada_Y = []
 
-        for i in otvet:
+        for i in fn:
             if i != " " and i != "\n" and i != "\x0c":
-                 otvet_Y.append(i)
+                 fn_Y.append(i)
 
-        for i in prav_otver:
+        for i in answer:
             if i != " " and i != "\n" and i != "\x0c":
-                 prav_otver_Y.append(i)
+                 answer_Y.append(i)
 
-        for i in str(balls):
+        for i in v_answer:
             if i != " " and i != "\n" and i != "\x0c":
-                 balls_Y.append(i)
-        
-        fio = str(''.join(fio_Y))
-        otvet = str(''.join(otvet_Y))   
-        prav_otver = str(''.join(prav_otver_Y))
-        balls = str(''.join(balls_Y))
+                 v_answer_Y.append(i)
+
+        for i in str(points):
+            if i != " " and i != "\n" and i != "\x0c":
+                 points_Y.append(i)
+
+        for i in olimpiada:
+            if i != " " and i != "\n" and i != "\x0c" and i != "‚" and i != "." and i != ":" and i != "/":
+                 print(i)
+                 olimpiada_Y.append(i)
+
+        fio = str(''.join(fn_Y))
+        otvet = str(''.join(answer_Y))   
+        prav_otver = str(''.join(v_answer_Y))
+        balls = str(''.join(points_Y))
+        o = str(''.join(olimpiada_Y))
         #--Подготовка 
 
         #--Запись данных
@@ -50,6 +57,7 @@ def insert_excel(fio, klass_nuvbmer, otvet, prav_otver, balls):
         D = f"D{cikl}"
         E = f"E{cikl}"
         F = f"F{cikl}"
+        G = f"G{cikl}"
 		#--Обозначение переменных
 
 		#--Вписывание данных в таблицу
@@ -60,7 +68,7 @@ def insert_excel(fio, klass_nuvbmer, otvet, prav_otver, balls):
         c2.value = fio
 
         c3 = sheet[C]
-        c3.value = klass_nuvbmer
+        c3.value = сlass_nuvbmer
 
         c4 = sheet[D]
         c4.value = otvet
@@ -71,6 +79,8 @@ def insert_excel(fio, klass_nuvbmer, otvet, prav_otver, balls):
         c6 = sheet[F]
         c6.value = balls
 
+        c7 = sheet[G]
+        c7.value = o
 		#--Вписывание данных в таблицу
 
         wb.save("Таблица.xlsx")# Сохранение таблицы
@@ -92,15 +102,16 @@ def insert_excel(fio, klass_nuvbmer, otvet, prav_otver, balls):
         #==Логирование
         with open('log/log.txt', 'a') as f:
             f.write(f"{datetime.date.today()}, Пользователь занесён в таблицу, его данные: \n")
-            f.write(f"Имя и Фамилия: {fio} \n")
-            f.write(f"Класс: {klass_nuvbmer} \n")            
-            f.write(f"Ответ ученика: {otvet} \n")
-            f.write(f"Правильный ответ: {prav_otver} \n")
-            f.write(f"Баллы набранные учеником: {balls} \n")
+            f.write(f"Имя и Фамилия: {fn} \n")
+            f.write(f"Класс: {сlass_nuvbmer} \n")
+            f.write(f"Ответ ученика: {answer} \n")
+            f.write(f"Правильный ответ: {v_answer} \n")
+            f.write(f"Баллы набранные учеником: {points} \n")
+            f.write(f"Олимпиада: {olimpiada} \n")
             f.write("----------------------- \n")
-            f.close()
+            f.close()        
         #==Логирование 
 
         return "Благодарю, данные были внесены" #->ОТПРАВКА ОТВЕТА
 
-#--Функция записи строк		
+#--Функция записи строк	

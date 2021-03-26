@@ -69,13 +69,13 @@ def photo(message):
 def lalala(message):
 
     #--Если пользователь ответил Да
-    if message.text == "Да":
+    if message.text.lower() == "да":
             bot.send_message(message.chat.id, "Понял, пришли мне правильные ответы и в начале поставь *#*. \n Пример: *ABCBA* => *#ABCBA*", parse_mode='Markdown')
     #--Если пользователь ответил Да
 
 
     #--Если пользователь ответил Нет
-    elif message.text == "Нет":
+    elif message.text.lower() == "нет":
 
             try: #--Если фото бланка есть
                 textWWW = processing(src) #Отправка фото и получение ответа от функций
